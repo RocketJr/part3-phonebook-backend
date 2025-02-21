@@ -9,6 +9,7 @@
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Leonardo Rikhardsson",
@@ -23,6 +24,9 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.7.8",
+    "@stylistic/eslint-plugin-js": "^4.0.1",
+    "eslint": "^9.20.1",
+    "globals": "^16.0.0",
     "nodemon": "^3.1.9"
   }
 }
