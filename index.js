@@ -4,9 +4,6 @@ const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
 
-let persons = [
-]
-
 app.use(express.static('dist'))
 
 const cors = require('cors')
@@ -16,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan('tiny'))
 
-morgan.token('body', function (req, res) { return req.method === 'POST' ? JSON.stringify(req.body) : '' })
+morgan.token('body', function (req) { return req.method === 'POST' ? JSON.stringify(req.body) : '' })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
@@ -62,8 +59,8 @@ app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
-    request.params.id, 
-    { name, number }, 
+    request.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
@@ -74,7 +71,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -86,7 +83,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-errorHandler = (error, request, response, next) => {
+const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
